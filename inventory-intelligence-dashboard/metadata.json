@@ -1,0 +1,5 @@
+{
+  "name": "Inventory Intelligence Dashboard",
+  "description": "An interactive dashboard for visualizing inventory levels, purchases, and usage trends. It features ingredient insights, predictive analytics using Gemini, shipment tracking, and cost optimization tools to help manage restaurant inventory effectively.",
+  "requestFramePermissions": []
+}
