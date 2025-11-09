@@ -12,18 +12,12 @@
 2. [Motivation](#motivation)
 3. [Features](#features)
 4. [Architecture & Tech Stack](#architecture‑tech‑stack)
-5. [Getting Started](#getting‑started)
-
-   * Prerequisites
-   * Installation
-   * Configuration
-   * Running the Dashboard
-6. [Data Sources & Integration](#data‑sources‑integration)
-7. [Usage Guide](#usage‑guide)
+5. [Data Sources & Integration](#data‑sources‑integration)
+6. [Usage Guide](#usage‑guide)
 
    * Key Views / Tabs
-8. [Known Issues & Limitations](#known‑issues‑limitations)
-9. [Acknowledgements](#acknowledgements)
+7. [Known Issues & Limitations](#known‑issues‑limitations)
+8. [Acknowledgements](#acknowledgements)
 
 ---
 
@@ -79,54 +73,6 @@ Managing a restaurant food supply chain is complex: ingredients arrive from ship
 * Python environment (version 3.14.0)
 * Dependencies listed in `requirements.txt`
 * Runs locally and is deployed on goDaddy
-
----
-
-## Getting Started
-
-### Prerequisites
-
-* Python 3.14.0
-* Virtual environment tool (venv)
-* Access to the data sources (purchase logs, menu sales, shipments)
-* API keys (Gemini AI)
-
-### Installation
-
-```bash
-# Clone the repository (or this sub‑folder)  
-git clone https://github.com/yashV131/Mai‑Shan‑Yun‑Inventory‑Intelligence.git  
-cd Mai‑Shan‑Yun‑Inventory‑Intelligence/inventory‑intelligence‑dashboard  
-
-# Create and activate virtual environment  
-python3 -m venv venv  
-source venv/bin/activate    # on Linux/macOS  
-# or venv\Scripts\activate   # on Windows  
-
-# Install dependencies  
-pip install -r requirements.txt  
-```
-
-### Configuration
-
-* Copy the example config file (if present) `config.example.yml` → `config.yml`
-* Edit the config to point to your data files / database / credentials
-
-  * e.g., `data/purchases.csv`, `data/shipments.csv`, `data/menu_sales.csv`
-  * Set any relevant parameters: forecasting horizon, alert thresholds, currency, etc
-
-### Running the Dashboard
-
-```bash
-# Activate environment (if not already)  
-source venv/bin/activate  
-
-# Run the dashboard  
-python app.py           # or `streamlit run app.py` if using Streamlit  
-```
-
-* Once started you’ll see a local web server (e.g., [http://localhost:8501](http://localhost:8501))
-* Open in browser and explore the visualisations, filters, drill‑downs
 
 ---
 
