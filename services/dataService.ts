@@ -208,7 +208,8 @@ export const calculateAllMonthsData = (salesData: SalesData, recipes: Recipe[], 
 
         const formattedUsage = Object.entries(ingredientUsage).map(([name, usage]) => ({ name, usage }));
 
-        const inventoryLevels = Object.keys(monthlyPurchases).map(ingName => {
+        // Build ingredient-level inventory entries only for ingredients that have shipment (purchase) data
+        const ingredientLevels = Object.keys(monthlyPurchases).map(ingName => {
             const purchased = monthlyPurchases[ingName] || 0;
             const used = ingredientUsage[ingName] || 0;
             return {
@@ -218,6 +219,51 @@ export const calculateAllMonthsData = (salesData: SalesData, recipes: Recipe[], 
                 net: purchased - used
             };
         }).sort((a,b)=>a.name.localeCompare(b.name));
+
+        // Build item-level inventory entries by allocating ingredient purchases proportionally to each item's usage
+        const itemLevels: { name: string, purchased: number, used: number, net: number }[] = [];
+        // Precompute total usage per ingredient for proportional allocation
+        const totalIngredientUsage = { ...ingredientUsage };
+
+        Object.keys(monthlySales).forEach(itemName => {
+            const unitsSold = monthlySales[itemName] || 0;
+            if (unitsSold <= 0) return;
+            const recipe = recipes.find(r => r.itemName === itemName);
+            // Compute used grams for this item (sum of ingQty * unitsSold)
+            let usedGrams = 0;
+            if (recipe) {
+                Object.entries(recipe.ingredients).forEach(([ingName, ingQty]) => {
+                    usedGrams += ingQty * unitsSold;
+                });
+            }
+
+            // Estimate purchased grams for this item by allocating ingredient purchases proportionally
+            let purchasedEstimate = 0;
+            if (recipe) {
+                Object.entries(recipe.ingredients).forEach(([ingName, ingQty]) => {
+                    const ingTotalUsage = totalIngredientUsage[ingName] || 0;
+                    const ingMonthlyPurchased = monthlyPurchases[ingName] || 0;
+                    const itemIngUsage = ingQty * unitsSold;
+                    if (ingMonthlyPurchased > 0 && ingTotalUsage > 0) {
+                        const fraction = itemIngUsage / ingTotalUsage;
+                        purchasedEstimate += ingMonthlyPurchased * fraction;
+                    }
+                });
+            }
+
+            // Include this item-level entry only if we were able to estimate purchased from shipments
+            if (purchasedEstimate > 0) {
+                itemLevels.push({
+                    name: itemName,
+                    purchased: Math.round(purchasedEstimate),
+                    used: Math.round(usedGrams),
+                    net: Math.round(purchasedEstimate - usedGrams)
+                });
+            }
+        });
+
+        // Final inventory levels include ingredient-level entries (with shipments) and item-level estimates (when possible)
+        const inventoryLevels = [...ingredientLevels, ...itemLevels];
 
         allMonthsData[month] = { ingredientUsage: formattedUsage, inventoryLevels };
     });
@@ -249,4 +295,74 @@ export const calculateReorderPredictions = (inventoryLevels: InventoryLevel[], i
             };
         })
         .sort((a, b) => a.daysLeft - b.daysLeft);
+};
+
+/**
+ * Calculate restock recommendations for a given month using shipments and sales (via recipes).
+ * - salesData: map month -> { itemName: count }
+ * - recipes: recipe list to derive ingredient usage per item
+ * - shipments: shipment definitions used to compute monthly purchases
+ * Returns ReorderPrediction[] for the supplied month (or empty array if month not found)
+ */
+import { RestockDetail } from '../types';
+import { monthlyInventorySummary } from '../data/mockData';
+
+export const calculateRestockRecommendations = (salesData: SalesData, recipes: Recipe[], shipments: Shipment[], month: string): RestockDetail[] => {
+    if (!salesData || !recipes || !shipments || !month) return [];
+
+    const monthlyPurchases = calculateMonthlyPurchases(shipments);
+    const monthSales = salesData[month];
+    if (!monthSales) return [];
+
+    // Compute ingredient usage for the month from recipes and monthSales
+    const ingredientUsage: Record<string, number> = {};
+    recipes.forEach(recipe => {
+        const unitsSold = monthSales[recipe.itemName] || 0;
+        if (unitsSold > 0) {
+            Object.entries(recipe.ingredients).forEach(([ingName, ingQty]) => {
+                ingredientUsage[ingName] = (ingredientUsage[ingName] || 0) + (ingQty * unitsSold);
+            });
+        }
+    });
+
+    // If we have an explicit monthly summary provided, prefer it (user-provided authoritative numbers)
+    const provided = monthlyInventorySummary[month];
+    if (provided) {
+        const detailsFromProvided: RestockDetail[] = Object.keys(provided).map(ingName => {
+            const entry = provided[ingName];
+            const purchased = Math.round(entry.shipment || 0);
+            const consumption = Math.round(entry.consumption || 0);
+            // prefer provided endingStock if available for stockLeft, otherwise compute purchased - consumption
+            const stockLeft = Math.round(typeof entry.endingStock === 'number' ? entry.endingStock : Math.max(0, purchased - consumption));
+            const status: RestockDetail['status'] = purchased < consumption ? 'Understocked' : 'Overstocked';
+            try { console.debug('[restock:provided] month=%s ingredient=%s purchased=%d consumption=%d stockLeft=%d', month, ingName, purchased, consumption, stockLeft); } catch (e) {}
+            return { name: ingName, purchased, consumption, stockLeft, status };
+        });
+        return detailsFromProvided.sort((a,b) => a.stockLeft - b.stockLeft);
+    }
+
+    // Build restock details for ingredients actually consumed in this month (so results change month-to-month)
+    const details: RestockDetail[] = Object.keys(ingredientUsage)
+        .filter(ingName => (ingredientUsage[ingName] || 0) > 0) // only ingredients used this month
+        .map(ingName => {
+            const consumption = ingredientUsage[ingName] || 0;
+            const purchased = monthlyPurchases[ingName] || 0; // may be 0 if no shipment record
+            const stockLeft = Math.max(0, Math.round(purchased - consumption));
+
+            // Debug: log per-ingredient values for the selected month to browser console (development help)
+            try { console.debug('[restock] month=%s ingredient=%s purchased=%d consumption=%d stockLeft=%d', month, ingName, Math.round(purchased), Math.round(consumption), stockLeft); } catch (e) {}
+
+            const status: RestockDetail['status'] = purchased < consumption ? 'Understocked' : 'Overstocked';
+
+            return {
+                name: ingName,
+                purchased: Math.round(purchased),
+                consumption: Math.round(consumption),
+                stockLeft,
+                status,
+            };
+        });
+
+    // Sort by stockLeft ascending (understocked first)
+    return details.sort((a, b) => a.stockLeft - b.stockLeft);
 };

@@ -60,3 +60,10 @@ export interface ReorderPrediction {
     daysLeft: number;
     status: 'Re-order Now' | 'Sufficient Stock';
 }
+export interface RestockDetail {
+  name: string;
+  purchased: number;
+  consumption: number;
+  stockLeft: number;
+  status: 'Understocked' | 'Risk of Understock' | 'Overstocked' | 'Perfectly Stocked' | 'Stocked';
+}

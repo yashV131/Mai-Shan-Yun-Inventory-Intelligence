@@ -1,7 +1,7 @@
 import React from 'react';
 import { MonthSelector } from './MonthSelector';
 import { FileUpload } from './FileUpload';
-import { Logo } from './Logo';
+// import { Logo } from './Logo';
 
 interface HeaderProps {
     selectedMonth: string;
@@ -15,7 +15,7 @@ export const Header: React.FC<HeaderProps> = ({ selectedMonth, availableMonths, 
         <header className="mb-8">
             <div className="flex flex-col md:flex-row justify-between items-center gap-4">
                 <div className="flex items-center gap-4">
-                    <Logo />
+                  
                     <h1 className="text-3xl md:text-4xl font-bold text-white whitespace-nowrap">
                         Inventory Dashboard
                     </h1>

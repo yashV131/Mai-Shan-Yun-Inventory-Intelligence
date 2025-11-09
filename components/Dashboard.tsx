@@ -15,7 +15,7 @@ export const Dashboard: React.FC = () => {
     const {
         selectedMonth,
         setSelectedMonth,
-        availableMonths,
+    availableMonths,
         currentMonthData,
         currentMonthSalesDetails,
         reorderPredictions,
@@ -29,6 +29,7 @@ export const Dashboard: React.FC = () => {
         error,
         setError
     } = useInventoryData();
+    
 
     return (
         <main className="container mx-auto p-4 sm:p-6 lg:p-8">
@@ -78,7 +79,7 @@ export const Dashboard: React.FC = () => {
                      <ChartCard title={`Inventory Hub - ${selectedMonth}`} icon={<ChartBarIcon className="w-6 h-6" />}>
                         <div className="flex flex-col md:flex-row h-full gap-4 -m-4 md:-m-6">
                             <div className="w-full md:w-2/3 h-full p-4 md:p-6">
-                                <InventoryLevelsChart data={currentMonthData.inventoryLevels} />
+                    <InventoryLevelsChart data={currentMonthData.inventoryLevels} />
                             </div>
                             <div className="w-full md:w-1/3 h-full border-t md:border-t-0 md:border-l border-primary">
                                 <InventoryAnalysis

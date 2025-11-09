@@ -2,7 +2,7 @@
 import { useState, useEffect, useMemo, useCallback } from 'react';
 import { Recipe, Shipment, SalesData, MonthlyData, Forecast, MonthlySalesDetails, ReorderPrediction } from '../types';
 import { recipeCsvData, shipmentCsvData, initialSalesData, initialSalesDetails } from '../data/mockData';
-import { parseRecipes, parseShipments, parseSales, parseSalesDetails, processUploadedXlsx, calculateAllMonthsData, calculateReorderPredictions } from '../services/dataService';
+import { parseRecipes, parseShipments, parseSales, parseSalesDetails, processUploadedXlsx, calculateAllMonthsData, calculateReorderPredictions, calculateRestockRecommendations } from '../services/dataService';
 import { getForecast, getInventoryAnalysis } from '../services/geminiService';
 
 export const useInventoryData = () => {
@@ -69,10 +69,12 @@ export const useInventoryData = () => {
     return salesDetails[selectedMonth] || { byItem: [], byCategory: [], byGroup: [] };
   }, [selectedMonth, salesDetails]);
 
+  // Prefer restock recommendations derived from shipments + sales data for the selected month.
   const reorderPredictions = useMemo(() => {
-    if (!currentMonthData) return [];
-    return calculateReorderPredictions(currentMonthData.inventoryLevels, currentMonthData.ingredientUsage);
-  }, [currentMonthData]);
+    if (!selectedMonth) return [];
+    // Use shipments + sales + recipes to calculate restock needs for selectedMonth
+    return calculateRestockRecommendations(salesData, recipes, shipments, selectedMonth);
+  }, [salesData, recipes, shipments, selectedMonth]);
 
   const handleFileUpload = useCallback(async (file: File) => {
     try {
@@ -132,6 +134,7 @@ export const useInventoryData = () => {
     selectedMonth,
     setSelectedMonth,
     availableMonths,
+    salesData,
     currentMonthData,
     currentMonthSalesDetails,
     reorderPredictions,
