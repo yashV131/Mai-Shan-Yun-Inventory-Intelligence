@@ -35,20 +35,18 @@
 
 ## Project Overview
 
-This dashboard provides a unified, interactive interface for visualizing, analysing and acting on inventory and purchasing data for the restaurant Mai Shan Yun. It pulls together datasets including purchase logs, shipments, menu sales trends and ingredient usage into a consolidated view, and supports insights such as:
+This dashboard provides an interactive interface for visualizing, analysing and acting on inventory and purchasing data for the restaurant Mai Shan Yun. It pulls together datasets including purchase logs, shipments, menu sales trends and ingredient usage into a consolidated view, and supports insights such as:
 
 * What ingredients are being over‑stocked or under‑stocked?
 * Which menu items are driving ingredient usage spikes?
 * Predictive signals: when should we restock certain items to avoid shortages or reduce waste?
 * Visualised dashboards to support inventory managers, operations teams and finance stakeholders.
 
-The dashboard is part of the wider “Inventory Intelligence” challenge or initiative for Mai Shan Yun, in which the goal is to optimise inventory flow, minimise waste, avoid stock‑outs, and help decision‑makers act based on data.
-
 ---
 
 ## Motivation
 
-Managing a restaurant food supply chain is complex: ingredients arrive from shipments, are used in menu items, vary in demand, spoil/fade, and inventories must be cost‑managed. This project aims to turn raw logs and disparate data sources into **actionable intelligence**. By providing visual insights and forecasting signals, the dashboard aims to reduce waste, avoid over‑ordering, and ensure the right ingredients are available at the right time.
+Managing a restaurant food supply chain is complex: ingredients arrive from shipments, are used in menu items, vary in demand, and inventories must be cost‑managed. This project aims to turn raw logs and disparate data sources into **actionable intelligence**. By providing visual insights and forecasting signals, the dashboard aims to analyze what's popular in specific months, reduce waste, avoid over‑ordering, and ensure the right ingredients are available at the right time.
 
 ---
 
@@ -68,25 +66,25 @@ Managing a restaurant food supply chain is complex: ingredients arrive from ship
 
 **Frontend / UI**
 
-* Likely built with a dashboarding framework (e.g., Streamlit, Dash, or web React + chart library)
-* Responsive layout, interactive filters, time‑slider, drill‑down capabilities
+* Built with a dashboarding framework through React with TypeScript
+* Responsive layout, interactive filters, AI overviews
 
 **Backend / Data Processing**
 
 * Data ingestion from multiple sources: purchase logs, ingredient usage, shipments, menu sales
-* Data cleaning and transformation steps: merging, aggregating, time‑bucketing
-* Possibly forecasting or rule‑based alert logic
+* Data cleaning and transformation using python scripts
+* Forecasting using python scripts and Gemini AI
 
 **Data Sources**
 
-* CSVs, database extracts or API feeds (depending on supply chain system)
-* Ingredient master list, menu‑item mapping, supplier info
+* CSVs and API feeds
+* Ingredient master list, menu‑item mapping, supply-item information
 
 **Deployment / Environment**
 
-* Python environment (version X.X)
+* Python environment (version 3.14.0)
 * Dependencies listed in `requirements.txt`
-* Runs locally or deployed on a server/cloud instance
+* Runs locally and is deployed on goDaddy
 
 ---
 
@@ -94,10 +92,10 @@ Managing a restaurant food supply chain is complex: ingredients arrive from ship
 
 ### Prerequisites
 
-* Python 3.8+ (or specified version)
-* Virtual environment tool (venv, conda)
+* Python 3.14.0
+* Virtual environment tool (venv)
 * Access to the data sources (purchase logs, menu sales, shipments)
-* (Optional) API keys if connecting to external services
+* API keys (Gemini AI)
 
 ### Installation
 
@@ -158,7 +156,7 @@ Integration steps typically include: load all datasets → clean/standardise dat
 
 ### Key Views / Tabs
 
-* **Dashboard Overview**: high‑level KPIs (inventory value, waste, shortage risk)
+* **Dashboard Overview**: ----
 * **Ingredient Usage & Trend**: line charts showing usage over time, top‑consumed ingredients
 * **Purchase & Shipment Flow**: visualisation of when orders placed vs when received vs when used
 * **Menu Item Impact**: which menu items consume the most/least ingredients, trending items
