@@ -156,57 +156,33 @@ Integration steps typically include: load all datasets → clean/standardise dat
 
 ### Key Views / Tabs
 
-* **Dashboard Overview**: ----
-* **Ingredient Usage & Trend**: line charts showing usage over time, top‑consumed ingredients
-* **Purchase & Shipment Flow**: visualisation of when orders placed vs when received vs when used
-* **Menu Item Impact**: which menu items consume the most/least ingredients, trending items
-* **Forecast / Alerts**: predicted exhaustion dates, reorder suggestions, over‑stock warnings
-* **Drill‑down & Filters**: filter by supplier, ingredient category, date range, menu item
+### Dashboard Overview
 
-### Typical Workflows
+The **Inventory Intelligence Dashboard** provides a consolidated view of inventory, ingredient usage, and sales performance for Mai Shan Yun. Key components include:
 
-1. **Inventory Health Check**: Open the overview to see current inventory value and identify any ingredients flagged for risk.
-2. **Investigate Usage Trend**: Spot an ingredient whose usage is rising fast → open the ingredient trend tab → filter by that ingredient → observe usage per menu item.
-3. **Supplier/Order Lag Analysis**: Use the purchase vs shipment view to identify longer lead‑times or delays from a particular supplier.
-4. **Forecast Reorder**: Go to forecast tab → set horizon (e.g., next 30/60 days) → see recommended reorder items and quantities.
-5. **Report Export**: Export the current view or snapshot for operations/finance review.
-
----
-
-## Customization & Extensibility
-
-The architecture is designed to be modular: you can extend or customise the dashboard by:
-
-* Adding new data sources (e.g., spoilage logs, supplier rating data)
-* Adding new visual components (e.g., heat maps, geographic maps of supplier shipments)
-* Tuning alert or forecast logic (e.g., different reorder thresholds, seasonal adjustments)
-* Changing the front‑end look and feel (theme, layout)
-* Integrating with other systems (e.g., Slack/email alerts when inventory risk is flagged)
-
-Developers can locate key parts of the code in modules like `/data_processing/`, `/visualisations/`, `/alerts/`. Be sure to update the config and dependencies accordingly.
-
----
-
-## Deployment
-
-To deploy for production:
-
-* Choose a hosting environment (cloud VM, containerised service, serverless)
-* Provision required dependencies (Python runtime, web server, firewall/open‑port)
-* Configure environment variables / credentials securely
-* Set up scheduling if needed (e.g., nightly data refresh, alert emails)
-* Monitor performance and user access
-* (Optional) Secure the dashboard with authentication if exposing externally
-
----
-
-## Testing
-
-* Unit tests exist (if included) under `/tests/`. Run via `pytest` or equivalent.
-* Check edge cases: missing data, zero usage, extremely high usage, negative values.
-* Validate forecasts and alert logic by back‑testing with historical data.
-* Ensure UI layout works across browsers/devices.
-* Validate that data ingestion handles changes in schema (e.g., new columns) gracefully.
+1.  **Ingredient Usage – Monthly View**
+    *   Bar chart showing top ingredients consumed for the selected month.
+    *   Allows managers to quickly identify overused or underused items.
+        
+2.  **Monthly Sales Overview**
+    *   Visualizes sales by menu group, category, or item.
+    *   Helps correlate ingredient consumption with menu performance.
+        
+3.  **AI Ingredient Forecast**
+    *   Predicts ingredient needs for upcoming months using historical sales and Gemini AI.
+    *   Users can generate forecasts with one click to plan procurement.
+        
+4.  **Inventory Hub – Stock vs Usage**
+    *   Compares purchased vs used quantities for each ingredient.
+    *   Quickly identifies overstocked or understocked items.
+        
+5.  **AI Inventory Analysis**
+    *   Provides actionable suggestions on adjusting shipments based on current stock levels.
+    *   Supports operational decisions to reduce shortages or excess inventory.
+        
+6.  **Reorder Forecast Table**
+    *   Summarizes purchased quantities, consumption, stock left, and current status (e.g., understocked).
+    *   Highlights critical items requiring immediate action.
 
 ---
 
@@ -220,35 +196,10 @@ To deploy for production:
 
 ---
 
-## Contributing
-
-We welcome contributions! If you’d like to propose a new feature, fix a bug, or enhance the dashboard:
-
-1. Fork the repository
-2. Create a new branch (`feature/your‑feature`, `fix/bug‑description`)
-3. Write tests where appropriate
-4. Submit a pull request with a clear description of your change
-5. Ensure code style and documentation are updated
-
-Please review the `CONTRIBUTING.md` (if present) for more details.
-
----
-
-## License
-
-This project is licensed under the [specify license here, e.g., MIT License] — see `LICENSE` file for details.
-
----
-
 ## Acknowledgements
 
 * Thanks to the team at [Mai Shan Yun Restaurant] for providing the challenge dataset and context.
 * The initiative is part of the TAMU Datathon 25 “Inventory Intelligence” challenge. ([TAMU Datathon 25: A Code Case!][1])
-* Any libraries/frameworks used (e.g., Streamlit, Dash, Pandas, Plotly)
-* Contributors and maintainers of this sub‑project
+* Reacact, Python, Gemini API, Pandas, Plotly)
 
 ---
-
-If you like, I can **generate** a ready‑to‑use markdown `README.md` file including badges (build/test coverage), sample screenshots, and links. Would you like me to do that?
-
-[1]: https://td25.devpost.com/?utm_source=chatgpt.com "TAMU Datathon 25: A Code Case!: TAMU Datathons Premiere ..."
