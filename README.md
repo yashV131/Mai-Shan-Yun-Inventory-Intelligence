@@ -82,8 +82,8 @@ This dashboard integrates multiple datasets, including (but not limited to):
 
 | Dataset                | Description                                                                         | Key Attributes                                         |
 | ---------------------- | ----------------------------------------------------------------------------------- | ------------------------------------------------------ |
-| Monthly Purchase Logs  | Records of every purchase order placed (ingredient, quantity, cost, date, supplier) | ingredient_id, qty, cost, date, supplier               |
-| Ingredient Usage Logs  | Usage of ingredients as consumed in menu items or converted by kitchen              | ingredient_id, menu_item_id, qty_used, date            |
+| Monthly Purchase Logs  | Records of every purchase order placed (ingredient, quantity, cost, date, supplier) | ingredient_id, qty, cost, supplier               |
+| Ingredient Usage Logs  | Usage of ingredients as consumed in menu items or converted by kitchen              | ingredient_id, menu_item_id, qty_used            |
 | Shipments              | Inbound shipments: date, supplier, tracking, arrival, quantity, SKU                 | shipment_id, ingredient_id, qty_received, arrival_date |
 | Menu Item Sales Trends | Sales logs of menu items (which drive ingredient usage)                             | menu_item_id, sales_qty, date                          |
 | Master Lists / Mapping | Ingredient master list (IDs, names, units), Menu‑Item → Ingredient mapping          | ingredient_id, menu_item_id, unit, cost_per_unit       |
