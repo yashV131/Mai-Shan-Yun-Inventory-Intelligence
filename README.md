@@ -193,7 +193,7 @@ The **Inventory Intelligence Dashboard** provides a consolidated view of invento
 ## Acknowledgements
 
 * Thanks to the team at [Mai Shan Yun Restaurant] for providing the challenge dataset and context.
-* The initiative is part of the TAMU Datathon 25 “Inventory Intelligence” challenge. ([TAMU Datathon 25: A Code Case!][1])
+* The initiative is part of the TAMU Datathon 25 “Inventory Intelligence” challenge.
 * Reacact, Python, Gemini API, Pandas, Plotly)
 
 ---
