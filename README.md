@@ -88,7 +88,7 @@ This dashboard integrates multiple datasets, including (but not limited to):
 | Menu Item Sales Trends | Sales logs of menu items (which drive ingredient usage)                             | menu_item_id, sales_qty, date                          |
 | Master Lists / Mapping | Ingredient master list (IDs, names, units), Menu‑Item → Ingredient mapping          | ingredient_id, menu_item_id, unit, cost_per_unit       |
 
-Integration steps typically include: load all datasets → clean/standardise dates & units → join via ingredient_id / menu_item_id → aggregate and compute key metrics (e.g., avg. consumption per menu item, reorder lead time, inventory turnover).
+Integration steps include: load all datasets → clean/standardise dates & units → aggregate and compute key metrics.
 
 ---
 
